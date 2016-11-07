@@ -10,13 +10,6 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        private INodeServices nodeServices;
-
-        public HomeController(INodeServices nodeServices)
-        {
-            this.nodeServices = nodeServices;
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -29,11 +22,11 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public IActionResult TonyAction()
+        public async Task<IActionResult> TonyAction([FromServices] INodeServices nodeServices)
         {
             // return View("About");
-            var result = nodeServices.InvokeAsync<Stream>("imageresizer.js", "diagram.jpg", 300);
-            return File(result.Result, "image/jpeg");
+            var result = await nodeServices.InvokeAsync<Stream>("imageresizer.js", "diagram.jpg", 300);
+            return File(result, "image/jpeg");
         }
 
         public IActionResult Contact()
